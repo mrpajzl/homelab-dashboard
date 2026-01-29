@@ -15,7 +15,11 @@ export default function Home() {
   if (!services || !settings) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading dashboard...</div>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <div className="text-white text-xl">Loading dashboard...</div>
+          <p className="text-slate-400 text-sm mt-2">Connecting to Convex backend</p>
+        </div>
       </div>
     );
   }
