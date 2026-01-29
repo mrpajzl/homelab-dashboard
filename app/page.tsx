@@ -23,15 +23,19 @@ export default function Home() {
   // Check if dashboard is initialized
   if (services.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+        <div className="text-center max-w-2xl">
+          <div className="text-6xl mb-6">🏠</div>
           <h1 className="text-4xl font-bold text-white mb-4">
             Welcome to Your Homelab Dashboard
           </h1>
-          <p className="text-slate-300 mb-8">
-            Initialize your dashboard with default services to get started
+          <p className="text-slate-300 mb-8 text-lg">
+            Initialize your dashboard with default services to get started. You can customize everything later in Settings.
           </p>
           <InitializeButton />
+          <p className="text-slate-500 text-sm mt-6">
+            This will create sample services for Arr Stack, Storage, Downloads, Projects, and Quick Access.
+          </p>
         </div>
       </div>
     );
@@ -62,6 +66,10 @@ export default function Home() {
           {Object.entries(groupedServices).map(([category, categoryServices]) => {
             const config = categoryConfig[category] || { title: category, icon: "📦" };
             const isProjectsCategory = category === "projects";
+            const enabledServices = categoryServices.filter((s) => s.enabled);
+
+            // Skip empty categories
+            if (enabledServices.length === 0) return null;
 
             return (
               <div
@@ -71,15 +79,13 @@ export default function Home() {
                 }`}
               >
                 <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                  <span>{config.icon}</span>
+                  <span className="text-2xl">{config.icon}</span>
                   <span>{config.title}</span>
                 </h2>
                 <div className={`grid gap-3 ${isProjectsCategory ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"}`}>
-                  {categoryServices
-                    .filter((s) => s.enabled)
-                    .map((service) => (
-                      <ServiceTile key={service._id} service={service} />
-                    ))}
+                  {enabledServices.map((service) => (
+                    <ServiceTile key={service._id} service={service} />
+                  ))}
                 </div>
               </div>
             );
@@ -91,7 +97,7 @@ export default function Home() {
         <div className="text-center mt-8">
           <Link
             href="/settings"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 font-medium"
           >
             ⚙️ Settings
           </Link>
